@@ -1,7 +1,7 @@
 package com.example.umc9th.domain.review.entity;
 
+import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.store.entity.Store;
-import com.example.umc9th.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,19 +20,19 @@ public class Review {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(name = "star")
     private Float star;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // FK: user_id
+    // FK: member_id  (기존 user_id → member_id)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     // FK: store_id
     @ManyToOne(fetch = FetchType.LAZY)
