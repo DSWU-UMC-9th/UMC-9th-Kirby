@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.4'           // 사용중인 부트 버전에 맞게 조정 가능
+    id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -16,14 +16,43 @@ java {
 repositories { mavenCentral() }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // 🔹 QueryDSL : OpenFeign 7.0 (워크북 그대로)
+    implementation "io.github.openfeign.querydsl:querydsl-jpa:7.0"
+    implementation "io.github.openfeign.querydsl:querydsl-core:7.0"
+    annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:7.0:jpa"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 }
 
-tasks.named('test') { useJUnitPlatform() }
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+//  QueryDSL 관련 설정
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+// 생성된 Q 클래스 경로를 소스셋에 추가
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+// 컴파일 시 생성 경로 지정
+tasks.withType(JavaCompile).configureEach {
+    options.generatedSourceOutputDirectory.set(querydslDir)
+}
+
+// clean 시 생성 폴더 삭제
+clean.doLast {
+    file(querydslDir).deleteDir()
+}

@@ -6,7 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository
+        extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
 
     // 가게 상세 > 리뷰 목록 (최신순, 페이징)
     Page<Review> findByStoreIdOrderByCreatedAtDesc(Long storeId, Pageable pageable);

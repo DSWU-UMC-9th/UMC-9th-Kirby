@@ -23,10 +23,12 @@ public class Reply {
     // FK: review_id (댓글이 달린 리뷰)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
+    @Getter(AccessLevel.PUBLIC)
     private Review review;
 
     // FK: member_id (댓글 작성자)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
+    @Getter(AccessLevel.PUBLIC)
     private Member member;
 }
