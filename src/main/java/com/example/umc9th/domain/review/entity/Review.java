@@ -32,11 +32,13 @@ public class Review {
     // FK: member_id  (기존 user_id → member_id)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
+    @Getter(AccessLevel.PUBLIC)
     private Member member;
 
     // FK: store_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
+    @Getter(AccessLevel.PUBLIC)
     private Store store;
 
     @PrePersist
