@@ -1,4 +1,4 @@
-package com.example.umc9th.domain.user.entity;
+package com.example.umc9th.domain.member.entity;
 
 import com.example.umc9th.domain.food.entity.Food;
 import jakarta.persistence.*;
@@ -6,11 +6,11 @@ import lombok.*;
 
 @Entity
 @Table(
-        name = "user_flavor",
+        name = "member_food",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_user_flavor_user_food",
-                        columnNames = {"user_id", "food_id"}
+                        name = "uk_member_food_member_food",
+                        columnNames = {"member_id", "food_id"}
                 )
         }
 )
@@ -18,19 +18,19 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class UserFlavor {
+public class MemberFood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_flavor_id")
+    @Column(name = "member_food_id")
     private Long id;
 
-    // 유저 - N:1
+    // 회원 - N:1 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-    // 음식 - N:1
+    // 음식 - N:1 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id", nullable = false)
     private Food food;

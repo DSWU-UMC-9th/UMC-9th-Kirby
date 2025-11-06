@@ -1,20 +1,28 @@
 package com.example.umc9th.domain.mission.entity;
 
-import com.example.umc9th.domain.user.entity.User;
+import com.example.umc9th.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "user_mission")
+@Table(
+        name = "member_mission",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_member_mission",
+                        columnNames = {"member_id", "mission_id"}
+                )
+        }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class UserMission {
+public class MemberMission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_mission_id")
+    @Column(name = "member_mission_id")
     private Long id;
 
     @Column(name = "is_complete", nullable = false)
@@ -25,8 +33,8 @@ public class UserMission {
     @JoinColumn(name = "mission_id", nullable = false)
     private Mission mission;
 
-    // FK: user_id
+    // FK: member_id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 }
