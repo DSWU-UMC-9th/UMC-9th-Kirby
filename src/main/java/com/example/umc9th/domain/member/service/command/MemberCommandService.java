@@ -7,4 +7,7 @@ public interface MemberCommandService {
 
     // 회원가입
     MemberResDTO.JoinDTO signUp(MemberReqDTO.JoinDTO dto);
+
+    // [추가] 미션 완료하기
+    void completeMission(Long memberId, Long memberMissionId);
 }
