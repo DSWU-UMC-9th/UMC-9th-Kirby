@@ -14,7 +14,8 @@ import com.example.umc9th.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import com.example.umc9th.domain.mission.entity.MemberMission; // [추가]
+import com.example.umc9th.domain.mission.repository.MemberMissionRepository; // [추가]
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
     private final MemberFoodRepository memberFoodRepository;
     private final FoodRepository foodRepository;
+    private final MemberMissionRepository memberMissionRepository; // [추가] 주입 필요!
 
     // 회원가입
     @Override
@@ -64,5 +66,29 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         // 응답 DTO 생성
         return MemberConverter.toJoinDTO(member);
+    }
+    // [추가] 미션 완료하기 구현
+    @Override
+    @Transactional
+    public void completeMission(Long memberId, Long memberMissionId) {
+
+        // 1. 해당 멤버미션 찾기
+        MemberMission memberMission = memberMissionRepository.findById(memberMissionId)
+                .orElseThrow(() -> new RuntimeException("MemberMission not found")); // 예외처리는 나중에 커스텀으로 변경 가능
+
+        // 2. 주인이 맞는지 검증 (선택사항이지만 권장)
+        if (!memberMission.getMember().getId().equals(memberId)) {
+            throw new RuntimeException("This mission does not belong to the member");
+        }
+
+        // 3. 완료 상태로 변경 (Setter 대신 비즈니스 메서드 사용 권장)
+        // MemberMission 엔티티에 setComplete 혹은 complete() 메서드가 필요합니다!
+        // 일단은 Setter가 없으면 엔티티를 수정해야 합니다. 아래 설명 참고!
+
+        // (임시) 만약 @Setter가 있다면:
+        // memberMission.setComplete(true);
+
+        // (권장) 엔티티에 메서드 만들기:
+        memberMission.complete();
     }
 }

@@ -10,6 +10,12 @@ import java.time.LocalDate;
 
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
+    // 특정 가게의 미션 목록 조회 (마감일 빠른 순)
+
+    Page<Mission> findAllByStoreIdOrderByDeadlineAsc(Long storeId, Pageable pageable);
+
+    // ================= 기존 코드들 (그대로 유지) =================
+
     // 4-A) 선택 지역 + 마감 전 미션 (페이징)
     Page<Mission> findByStoreLocationIdAndDeadlineAfter(Long locationId, LocalDate today, Pageable pageable);
 

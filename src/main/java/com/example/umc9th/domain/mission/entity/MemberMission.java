@@ -37,4 +37,9 @@ public class MemberMission {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    //  [추가] 미션 완료 처리 메서드
+    public void complete() {
+        this.isComplete = true;
+    }
 }
